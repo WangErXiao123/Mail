@@ -1,11 +1,14 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <recommend-view :recommends="recommends"></recommend-view>
-    <feature-view/>
-    <tab-control :titles="['流行','新款','精选']"/>
-    <goods-list :goods="goods['pop'].list"/>
+    <scroll class="content">
+      <home-swiper :banners="banners"></home-swiper>
+      <recommend-view :recommends="recommends"></recommend-view>
+      <feature-view/>
+      <tab-control :titles="['流行','新款','精选']"/>
+      <goods-list :goods="goods['pop'].list"/>
+    </scroll>
+
   </div>
 </template>
 
@@ -18,6 +21,7 @@ import FeatureView from "@/views/home/childComps/FeatureView"
 import NavBar from '@/components/common/navbar/NavBar'
 import TabControl from "@/components/content/tabControl/TabControl"
 import GoodsList from "@/components/content/goods/GoodsList";
+import Scroll from "@/components/common/scroll/Scroll";
 
 import { getHomeMultidata,getHomeGoods } from "@/network/home"
 
@@ -30,7 +34,8 @@ name: "Home",
     RecommendView,
     FeatureView,
     TabControl,
-    GoodsList
+    GoodsList,
+    Scroll
   },
   data(){
   return{
@@ -76,5 +81,8 @@ name: "Home",
 .home-nav {
   background-color: var(--color-tint);
   color: #fff;
+}
+.content {
+
 }
 </style>
