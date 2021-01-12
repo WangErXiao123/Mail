@@ -18,7 +18,14 @@ export default {
   mounted() {
   this.scroll = new BScroll(this.$refs.wrapper,{
 
+    probeType: this.probeType,
+    pullUpLoad: this.pullUpLoad
   })
+  },
+  methods:{
+    scrollTo(x, y, time=300){
+      this.scroll && this.scroll.scrollTo(x, y, time)
+    }
   }
 }
 </script>
