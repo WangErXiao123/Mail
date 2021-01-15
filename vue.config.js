@@ -1,17 +1,50 @@
-const path = require('path');//引入path模块
-function resolve(dir){
-  return path.join(__dirname,dir)//path.join(__dirname)设置绝对路径
-}
-module.exports={
-  chainWebpack:(config)=>{
-    config.resolve.alias
-      .set('@',resolve('./src'))
-      .set('components',resolve('./src/components'))
-      .set('assets',resolve('./src/assets'))
-      .set('commonjs',resolve('./src/commonjs'))
-      .set('network',resolve('./src/network'))
-      .set('views',resolve('./src/views'))
-    //set第一个参数：设置的别名，第二个参数：设置的路径
+module.exports = {
+  productionSourceMap: false,
+  publicPath: process.env.NODE_ENV === "production" ? "/shop" : "/",
+  chainWebpack: config => {
+    // 发布阶段打包入口
+    config.when(process.env.NODE_ENV === "production", config => {
+      config
+        .entry("app")
+        .clear()
+        .add("./src/main-prod.js");
 
+      // 配置cdn依赖
+      config.set("externals", {
+        vue: "Vue",
+        "better-scroll": "BScroll",
+        vant: "vant"
+      });
+
+      // 是否发布模式,是
+      config.plugin("html").tap(args => {
+        args[0].isProd = true;
+        return args;
+      });
+    });
+    // 开发阶段打包入口
+    config.when(process.env.NODE_ENV === "development", config => {
+      config
+        .entry("app")
+        .clear()
+        .add("./src/main-dev.js");
+      // 是否发布模式,否
+      config.plugin("html").tap(args => {
+        args[0].isProd = false;
+        return args;
+      });
+    });
+  },
+  configureWebpack: {
+    resolve: {
+      // 配置路径别名
+      alias: {
+        assets: "@/assets",
+        common: "@/common",
+        components: "@/components",
+        network: "@/network",
+        views: "@/views"
+      }
+    }
   }
-}
+};
